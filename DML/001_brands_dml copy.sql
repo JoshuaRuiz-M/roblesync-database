@@ -37,6 +37,9 @@ VALUES
 (2, 'BRANDS', 'Marcas', '/brands', 'pi pi-tag', 1, 1, SYSDATETIME(), NULL)
 GO
 
+select * from navigation.menu_items order by menu_item_id desc
+
+
 INSERT INTO navigation.role_menu_items (role_id, menu_item_id)
 VALUES
 (1, 8);
