@@ -14,8 +14,29 @@ VALUES
 SELECT * FROM security.permissions
 WHERE code LIKE 'BRAND_%';
 
+
 INSERT INTO security.role_permissions (
     role_id,
     permission_id
 )
 VALUES (1, 24), (1, 25), (1, 26), (1, 27);
+
+
+INSERT INTO navigation.menu_items (
+    parent_id,
+    code,
+    label,
+    path,
+    icon,
+    sort_order,
+    is_active,
+    created_at,
+    updated_at
+)
+VALUES
+(2, 'BRANDS', 'Marcas', '/brands', 'pi pi-tag', 1, 1, SYSDATETIME(), NULL)
+GO
+
+INSERT INTO navigation.role_menu_items (role_id, menu_item_id)
+VALUES
+(1, 8);
