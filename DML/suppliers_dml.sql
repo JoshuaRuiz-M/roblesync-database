@@ -38,6 +38,9 @@ VALUES
 (NULL, 'PURCHASING', 'Compras', NULL, 'pi pi-shopping-cart', 1, 1, SYSDATETIME(), NULL)
 GO
 
+INSERT INTO navigation.role_menu_items (role_id, menu_item_id)
+VALUES
+(1, 13);
 
 SELECT * FROM navigation.menu_items ORDER BY menu_item_id DESC
 GO
