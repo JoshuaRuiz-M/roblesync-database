@@ -151,7 +151,7 @@ ON purchasing.product_suppliers(supplier_id);
 GO
 
 CREATE TABLE purchasing.purchase_orders (
-    purchase_order_id BIGINT IDENTITY(1,1) NOT NULL,
+    purchase_order_id INT IDENTITY(1,1) NOT NULL,
     order_number NVARCHAR(50) NOT NULL,
     supplier_id INT NOT NULL,
     order_date DATETIME2(3) NOT NULL,
@@ -253,8 +253,8 @@ ON purchasing.purchase_orders(supplier_id, order_date);
 GO
 
 CREATE TABLE purchasing.purchase_order_details (
-    purchase_order_detail_id BIGINT IDENTITY(1,1) NOT NULL,
-    purchase_order_id BIGINT NOT NULL,
+    purchase_order_detail_id INT IDENTITY(1,1) NOT NULL,
+    purchase_order_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity DECIMAL(18,3) NOT NULL,
     unit_cost DECIMAL(18,4) NOT NULL,
@@ -354,9 +354,9 @@ ON purchasing.purchase_order_details(product_id);
 GO
 
 CREATE TABLE purchasing.goods_receipts (
-    goods_receipt_id BIGINT IDENTITY(1,1) NOT NULL,
+    goods_receipt_id INT IDENTITY(1,1) NOT NULL,
     receipt_number NVARCHAR(50) NOT NULL,
-    purchase_order_id BIGINT NOT NULL,
+    purchase_order_id INT NOT NULL,
     warehouse_id INT NOT NULL,
     receipt_date DATETIME2(3) NOT NULL,
     status NVARCHAR(20) NOT NULL,
@@ -450,11 +450,11 @@ ON purchasing.goods_receipts(warehouse_id, receipt_date);
 GO
 
 CREATE TABLE purchasing.goods_receipt_details (
-    goods_receipt_detail_id BIGINT IDENTITY(1,1) NOT NULL,
-    goods_receipt_id BIGINT NOT NULL,
-    purchase_order_id BIGINT NOT NULL,
-    purchase_order_detail_id BIGINT NOT NULL,
-    batch_id BIGINT NOT NULL,
+    goods_receipt_detail_id INT IDENTITY(1,1) NOT NULL,
+    goods_receipt_id INT NOT NULL,
+    purchase_order_id INT NOT NULL,
+    purchase_order_detail_id INT NOT NULL,
+    batch_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity_received DECIMAL(18,3) NOT NULL,
     unit_cost DECIMAL(18,4) NOT NULL,
@@ -534,9 +534,9 @@ ON purchasing.goods_receipt_details(batch_id);
 GO
 
 CREATE TABLE purchasing.supplier_invoices (
-    supplier_invoice_id BIGINT IDENTITY(1,1) NOT NULL,
+    supplier_invoice_id INT IDENTITY(1,1) NOT NULL,
     supplier_id INT NOT NULL,
-    purchase_order_id BIGINT NOT NULL,
+    purchase_order_id INT NOT NULL,
     invoice_number NVARCHAR(50) NOT NULL,
     invoice_date DATE NOT NULL,
     due_date DATE NOT NULL,

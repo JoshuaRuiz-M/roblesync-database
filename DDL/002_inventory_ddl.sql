@@ -71,7 +71,7 @@ DEFAULT (SYSUTCDATETIME()) FOR created_at;
 GO
 
 CREATE TABLE inventory.product_batches (
-    batch_id BIGINT IDENTITY(1,1) NOT NULL,
+    batch_id INT IDENTITY(1,1) NOT NULL,
     product_id INT NOT NULL,
     batch_number NVARCHAR(100) NOT NULL,
     manufacturing_date DATE NULL,
@@ -147,7 +147,7 @@ ON inventory.product_batches(expiration_date);
 GO
 
 CREATE TABLE inventory.warehouse_stock (
-    warehouse_stock_id BIGINT IDENTITY(1,1) NOT NULL,
+    warehouse_stock_id INT IDENTITY(1,1) NOT NULL,
     warehouse_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity_on_hand DECIMAL(18,3) NOT NULL,
@@ -209,10 +209,10 @@ ON inventory.warehouse_stock(product_id);
 GO
 
 CREATE TABLE inventory.batch_stock (
-    batch_stock_id BIGINT IDENTITY(1,1) NOT NULL,
+    batch_stock_id INT IDENTITY(1,1) NOT NULL,
     warehouse_id INT NOT NULL,
     product_id INT NOT NULL,
-    batch_id BIGINT NOT NULL,
+    batch_id INT NOT NULL,
     quantity_on_hand DECIMAL(18,3) NOT NULL,
     quantity_reserved DECIMAL(18,3) NOT NULL,
     updated_at DATETIME2(3) NULL,
@@ -273,10 +273,10 @@ GO
 
 
 CREATE TABLE inventory.inventory_movements (
-    inventory_movement_id BIGINT IDENTITY(1,1) NOT NULL,
+    inventory_movement_id INT IDENTITY(1,1) NOT NULL,
     warehouse_id INT NOT NULL,
     product_id INT NOT NULL,
-    batch_id BIGINT NULL,
+    batch_id INT NULL,
     movement_type NVARCHAR(30) NOT NULL,
     movement_date DATETIME2(3) NOT NULL,
     quantity DECIMAL(18,3) NOT NULL,
@@ -285,7 +285,7 @@ CREATE TABLE inventory.inventory_movements (
     balance_quantity DECIMAL(18,3) NOT NULL,
     balance_value DECIMAL(19,4) NOT NULL,
     reference_type NVARCHAR(50) NULL,
-    reference_id BIGINT NULL,
+    reference_id INT NULL,
     notes NVARCHAR(500) NULL,
     created_at DATETIME2(3) NOT NULL,
     created_by INT NOT NULL

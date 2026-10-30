@@ -9,10 +9,10 @@ END;
 GO
 
 CREATE TABLE logistics.shipments (
-    shipment_id BIGINT IDENTITY(1,1) NOT NULL,
+    shipment_id INT IDENTITY(1,1) NOT NULL,
     shipment_number NVARCHAR(50) NOT NULL,
-    sales_order_id BIGINT NOT NULL,
-    sales_invoice_id BIGINT NOT NULL,
+    sales_order_id INT NOT NULL,
+    sales_invoice_id INT NOT NULL,
     warehouse_id INT NOT NULL,
     shipment_date DATETIME2(3) NOT NULL,
     status NVARCHAR(20) NOT NULL,
@@ -130,7 +130,7 @@ ON logistics.shipments(status, shipment_date);
 GO
 
 CREATE TABLE logistics.warehouse_transfers (
-    warehouse_transfer_id BIGINT IDENTITY(1,1) NOT NULL,
+    warehouse_transfer_id INT IDENTITY(1,1) NOT NULL,
     transfer_number NVARCHAR(50) NOT NULL,
     source_warehouse_id INT NOT NULL,
     destination_warehouse_id INT NOT NULL,
@@ -268,10 +268,10 @@ GO
 
 
 CREATE TABLE logistics.warehouse_transfer_details (
-    warehouse_transfer_detail_id BIGINT IDENTITY(1,1) NOT NULL,
-    warehouse_transfer_id BIGINT NOT NULL,
+    warehouse_transfer_detail_id INT IDENTITY(1,1) NOT NULL,
+    warehouse_transfer_id INT NOT NULL,
     product_id INT NOT NULL,
-    batch_id BIGINT NOT NULL,
+    batch_id INT NOT NULL,
     quantity DECIMAL(18,3) NOT NULL,
     unit_cost DECIMAL(18,4) NOT NULL,
     created_at DATETIME2(3) NOT NULL,

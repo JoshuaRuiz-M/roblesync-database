@@ -10,8 +10,8 @@ GO
 
 
 CREATE TABLE finance.accounts_receivable (
-    account_receivable_id BIGINT IDENTITY(1,1) NOT NULL,
-    sales_invoice_id BIGINT NOT NULL,
+    account_receivable_id INT IDENTITY(1,1) NOT NULL,
+    sales_invoice_id INT NOT NULL,
     customer_id INT NOT NULL,
     original_amount DECIMAL(18,2) NOT NULL,
     outstanding_balance DECIMAL(18,2) NOT NULL,
@@ -104,8 +104,8 @@ ON finance.accounts_receivable(
 GO
 
 CREATE TABLE finance.customer_payments (
-    customer_payment_id BIGINT IDENTITY(1,1) NOT NULL,
-    account_receivable_id BIGINT NOT NULL,
+    customer_payment_id INT IDENTITY(1,1) NOT NULL,
+    account_receivable_id INT NOT NULL,
     payment_number NVARCHAR(50) NOT NULL,
     payment_date DATETIME2(3) NOT NULL,
     amount DECIMAL(18,2) NOT NULL,
@@ -176,8 +176,8 @@ GO
 
 
 CREATE TABLE finance.accounts_payable (
-    account_payable_id BIGINT IDENTITY(1,1) NOT NULL,
-    supplier_invoice_id BIGINT NOT NULL,
+    account_payable_id INT IDENTITY(1,1) NOT NULL,
+    supplier_invoice_id INT NOT NULL,
     supplier_id INT NOT NULL,
     original_amount DECIMAL(18,2) NOT NULL,
     outstanding_balance DECIMAL(18,2) NOT NULL,

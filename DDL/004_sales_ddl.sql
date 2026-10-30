@@ -284,7 +284,7 @@ GO
 
 
 CREATE TABLE sales.sales_orders (
-    sales_order_id BIGINT IDENTITY(1,1) NOT NULL,
+    sales_order_id INT IDENTITY(1,1) NOT NULL,
     order_number NVARCHAR(50) NOT NULL,
     customer_id INT NOT NULL,
     salesperson_id INT NOT NULL,
@@ -442,8 +442,8 @@ GO
 
 
 CREATE TABLE sales.sales_order_details (
-    sales_order_detail_id BIGINT IDENTITY(1,1) NOT NULL,
-    sales_order_id BIGINT NOT NULL,
+    sales_order_detail_id INT IDENTITY(1,1) NOT NULL,
+    sales_order_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity DECIMAL(18,3) NOT NULL,
     quantity_reserved DECIMAL(18,3) NOT NULL,
@@ -550,8 +550,8 @@ GO
 
 
 CREATE TABLE sales.sales_invoices (
-    sales_invoice_id BIGINT IDENTITY(1,1) NOT NULL,
-    sales_order_id BIGINT NOT NULL,
+    sales_invoice_id INT IDENTITY(1,1) NOT NULL,
+    sales_order_id INT NOT NULL,
     customer_id INT NOT NULL,
     salesperson_id INT NOT NULL,
     invoice_series NVARCHAR(50) NOT NULL,
@@ -707,8 +707,8 @@ ON sales.sales_invoices(customer_id, due_date);
 GO
 
 CREATE TABLE sales.sales_invoice_details (
-    sales_invoice_detail_id BIGINT IDENTITY(1,1) NOT NULL,
-    sales_invoice_id BIGINT NOT NULL,
+    sales_invoice_detail_id INT IDENTITY(1,1) NOT NULL,
+    sales_invoice_id INT NOT NULL,
     product_id INT NOT NULL,
     quantity DECIMAL(18,3) NOT NULL,
     unit_price DECIMAL(18,4) NOT NULL,
