@@ -19,7 +19,7 @@ INSERT INTO security.role_permissions (
     role_id,
     permission_id
 )
-VALUES (1, 45), (1, 46), (1, 47), (1, 48);
+VALUES (1, 54), (1, 55), (1, 56), (1, 57);
 
 
 INSERT INTO navigation.menu_items (
@@ -34,7 +34,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(2, 'WAREHOUSES', 'Almacenes', '/warehouses', 'pi pi-warehouse', 2, 1, SYSDATETIME(), NULL)
+(3, 'WAREHOUSES', 'Almacenes', '/warehouses', 'pi pi-warehouse', 2, 1, SYSDATETIME(), NULL)
 GO
 
 select * from navigation.menu_items order by menu_item_id desc
