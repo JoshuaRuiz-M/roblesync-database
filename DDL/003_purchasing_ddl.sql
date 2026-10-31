@@ -8,6 +8,23 @@ BEGIN
 END;
 GO
 
+INSERT INTO navigation.menu_items (
+    parent_id,
+    code,
+    label,
+    path,
+    icon,
+    sort_order,
+    is_active,
+    created_at,
+    updated_at
+)
+VALUES
+(NULL, 'PURCHASING', 'Compras', NULL, 'pi pi-shopping-cart',4, 1, SYSDATETIME(), NULL)
+GO
+
+select * from navigation.menu_items order by menu_item_id desc
+
 CREATE TABLE purchasing.suppliers (
     supplier_id INT IDENTITY(1,1) NOT NULL,
     tax_id NVARCHAR(20) NOT NULL,

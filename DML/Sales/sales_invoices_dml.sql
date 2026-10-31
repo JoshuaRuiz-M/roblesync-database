@@ -32,7 +32,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(23, 'SALES_INVOICES', 'Facturas de Venta', '/sales-invoices', 'pi pi-file-invoice', 1, 1, SYSDATETIME(), NULL)
+(23, 'SALES_INVOICES', 'Facturas de Venta', '/sales-invoices', 'pi pi-receipt', 3, 1, SYSDATETIME(), NULL)
 
 
 SELECT * FROM navigation.menu_items ORDER BY menu_item_id DESC

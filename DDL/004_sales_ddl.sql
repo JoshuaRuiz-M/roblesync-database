@@ -20,7 +20,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(NULL, 'SALES', 'Ventas', NULL, 'pi pi-box', 1, 1, SYSDATETIME(), NULL)
+(NULL, 'SALES', 'Ventas', NULL, 'pi pi-chart-line', 5, 1, SYSDATETIME(), NULL)
 GO
 
 select * from navigation.menu_items order by menu_item_id desc

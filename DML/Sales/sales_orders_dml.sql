@@ -39,7 +39,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(23, 'SALES_ORDERS', 'Órdenes de Venta', '/sales-orders', 'pi pi-shopping-cart', 1, 1, SYSDATETIME(), NULL)
+(23, 'SALES_ORDERS', 'Órdenes de Venta', '/sales-orders', 'pi pi-clipboard', 4, 1, SYSDATETIME(), NULL)
 
 
 select * from navigation.menu_items order by menu_item_id desc

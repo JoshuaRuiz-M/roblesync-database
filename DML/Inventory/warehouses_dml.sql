@@ -34,7 +34,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(2, 'WAREHOUSES', 'Almacenes', '/warehouses', 'pi pi-building', 1, 1, SYSDATETIME(), NULL)
+(2, 'WAREHOUSES', 'Almacenes', '/warehouses', 'pi pi-warehouse', 3, 1, SYSDATETIME(), NULL)
 GO
 
 select * from navigation.menu_items order by menu_item_id desc
