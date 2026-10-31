@@ -1,0 +1,1242 @@
+
+Table "security"."users" {
+  "user_id" "INT IDENTITY(1,1)" [not null]
+  "username" NVARCHAR(50) [not null]
+  "email" NVARCHAR(255) [not null]
+  "password_hash" NVARCHAR(255) [not null]
+  "first_name" NVARCHAR(100) [not null]
+  "last_name" NVARCHAR(100) [not null]
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "updated_at" DATETIME2(3)
+
+  Indexes {
+    user_id [pk, name: "PK_users"]
+    username [unique, name: "UQ_users_username"]
+    email [unique, name: "UQ_users_email"]
+  }
+}
+
+Table "security"."roles" {
+  "role_id" "INT IDENTITY(1,1)" [not null]
+  "code" NVARCHAR(100) [not null]
+  "name" NVARCHAR(150) [not null]
+  "description" NVARCHAR(500)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "updated_at" DATETIME2(3)
+
+  Indexes {
+    role_id [pk, name: "PK_roles"]
+    code [unique, name: "UQ_roles_code"]
+  }
+}
+
+Table "security"."permissions" {
+  "permission_id" "INT IDENTITY(1,1)" [not null]
+  "code" NVARCHAR(150) [not null]
+  "name" NVARCHAR(150) [not null]
+  "description" NVARCHAR(500)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "updated_at" DATETIME2(3)
+
+  Indexes {
+    permission_id [pk, name: "PK_permissions"]
+    code [unique, name: "UQ_permissions_code"]
+  }
+}
+
+Table "security"."user_roles" {
+  "user_id" INT [not null]
+  "role_id" INT [not null]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+
+  Indexes {
+    (user_id, role_id) [pk, name: "PK_user_roles"]
+    role_id [name: "IX_user_roles_role_id"]
+  }
+}
+
+Table "security"."role_permissions" {
+  "role_id" INT [not null]
+  "permission_id" INT [not null]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+
+  Indexes {
+    (role_id, permission_id) [pk, name: "PK_role_permissions"]
+    permission_id [name: "IX_role_permissions_permission_id"]
+  }
+}
+
+Table "navigation"."menu_items" {
+  "menu_item_id" "INT IDENTITY(1,1)" [not null]
+  "parent_id" INT
+  "code" NVARCHAR(100) [not null]
+  "label" NVARCHAR(150) [not null]
+  "path" NVARCHAR(255)
+  "icon" NVARCHAR(100)
+  "sort_order" INT [not null, default: 0]
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "updated_at" DATETIME2(3)
+
+  Checks {
+    `sort_order >= 0` [name: 'CK_menu_items_sort_order']
+    `parent_id IS NULL OR parent_id <> menu_item_id` [name: 'CK_menu_items_parent']
+  }
+
+  Indexes {
+    menu_item_id [pk, name: "PK_menu_items"]
+    code [unique, name: "UQ_menu_items_code"]
+    (parent_id, sort_order) [name: "IX_menu_items_parent_id_sort_order"]
+  }
+}
+
+Table "navigation"."role_menu_items" {
+  "role_id" INT [not null]
+  "menu_item_id" INT [not null]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+
+  Indexes {
+    (role_id, menu_item_id) [pk, name: "PK_role_menu_items"]
+    menu_item_id [name: "IX_role_menu_items_menu_item_id"]
+  }
+}
+
+Table "catalog"."brands" {
+  "brand_id" "INT IDENTITY(1,1)" [not null]
+  "code" NVARCHAR(50) [not null]
+  "name" NVARCHAR(150) [not null]
+  "description" NVARCHAR(500)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    brand_id [pk, name: "PK_brands"]
+    code [unique, name: "UQ_brands_code"]
+  }
+}
+
+Table "catalog"."categories" {
+  "category_id" "INT IDENTITY(1,1)" [not null]
+  "code" NVARCHAR(50) [not null]
+  "name" NVARCHAR(150) [not null]
+  "description" NVARCHAR(500)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    category_id [pk, name: "PK_categories"]
+    code [unique, name: "UQ_categories_code"]
+  }
+}
+
+Table "catalog"."product_lines" {
+  "product_line_id" "INT IDENTITY(1,1)" [not null]
+  "category_id" INT [not null]
+  "code" NVARCHAR(50) [not null]
+  "name" NVARCHAR(150) [not null]
+  "description" NVARCHAR(500)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    product_line_id [pk, name: "PK_product_lines"]
+    code [unique, name: "UQ_product_lines_code"]
+    category_id [name: "IX_product_lines_category_id"]
+  }
+}
+
+Table "catalog"."units_of_measure" {
+  "unit_of_measure_id" "INT IDENTITY(1,1)" [not null]
+  "code" NVARCHAR(20) [not null]
+  "name" NVARCHAR(100) [not null]
+  "abbreviation" NVARCHAR(20) [not null]
+  "description" NVARCHAR(255)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    unit_of_measure_id [pk, name: "PK_units_of_measure"]
+    code [unique, name: "UQ_units_of_measure_code"]
+  }
+}
+
+Table "catalog"."products" {
+  "product_id" "INT IDENTITY(1,1)" [not null]
+  "brand_id" INT [not null]
+  "product_line_id" INT [not null]
+  "unit_of_measure_id" INT [not null]
+  "sku" NVARCHAR(50) [not null]
+  "barcode" NVARCHAR(50) [not null]
+  "name" NVARCHAR(200) [not null]
+  "description" NVARCHAR(1000)
+  "weight" DECIMAL(18,3)
+  "average_cost" DECIMAL(18,4) [not null, default: 0]
+  "list_price" DECIMAL(18,4) [not null]
+  "minimum_stock" DECIMAL(18,3) [not null, default: 0]
+  "maximum_stock" DECIMAL(18,3) [not null, default: 0]
+  "reorder_point" DECIMAL(18,3) [not null, default: 0]
+  "tracks_expiration" BIT [not null, default: 0]
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `weight IS NULL OR weight >= 0` [name: 'CK_products_weight']
+    `average_cost >= 0` [name: 'CK_products_average_cost']
+    `list_price >= 0` [name: 'CK_products_list_price']
+    `minimum_stock >= 0
+    AND maximum_stock >= minimum_stock
+    AND reorder_point >= 0
+    AND reorder_point <= maximum_stock` [name: 'CK_products_stock_levels']
+  }
+
+  Indexes {
+    product_id [pk, name: "PK_products"]
+    sku [unique, name: "UQ_products_sku"]
+    barcode [unique, name: "UQ_products_barcode"]
+    brand_id [name: "IX_products_brand_id"]
+    product_line_id [name: "IX_products_product_line_id"]
+    unit_of_measure_id [name: "IX_products_unit_of_measure_id"]
+  }
+}
+
+Table "inventory"."warehouses" {
+  "warehouse_id" "INT IDENTITY(1,1)" [not null]
+  "code" NVARCHAR(50) [not null]
+  "name" NVARCHAR(150) [not null]
+  "description" NVARCHAR(500)
+  "address" NVARCHAR(300)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    warehouse_id [pk, name: "PK_warehouses"]
+    code [unique, name: "UQ_warehouses_code"]
+  }
+}
+
+Table "inventory"."product_batches" {
+  "batch_id" "INT IDENTITY(1,1)" [not null]
+  "product_id" INT [not null]
+  "batch_number" NVARCHAR(100) [not null]
+  "manufacturing_date" DATE
+  "expiration_date" DATE
+  "received_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `manufacturing_date IS NULL
+    OR expiration_date IS NULL
+    OR manufacturing_date <= expiration_date` [name: 'CK_product_batches_dates']
+  }
+
+  Indexes {
+    batch_id [pk, name: "PK_product_batches"]
+    (product_id, batch_number) [unique, name: "UQ_product_batches_product_number"]
+    (batch_id, product_id) [unique, name: "UQ_product_batches_batch_product"]
+    expiration_date [name: "IX_product_batches_expiration_date"]
+  }
+}
+
+Table "inventory"."warehouse_stock" {
+  "warehouse_stock_id" "INT IDENTITY(1,1)" [not null]
+  "warehouse_id" INT [not null]
+  "product_id" INT [not null]
+  "quantity_on_hand" DECIMAL(18,3) [not null, default: 0]
+  "quantity_reserved" DECIMAL(18,3) [not null, default: 0]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `quantity_on_hand >= 0
+    AND quantity_reserved >= 0
+    AND quantity_reserved <= quantity_on_hand` [name: 'CK_warehouse_stock_quantities']
+  }
+
+  Indexes {
+    warehouse_stock_id [pk, name: "PK_warehouse_stock"]
+    (warehouse_id, product_id) [unique, name: "UQ_warehouse_stock_warehouse_product"]
+    product_id [name: "IX_warehouse_stock_product_id"]
+  }
+}
+
+Table "inventory"."batch_stock" {
+  "batch_stock_id" "INT IDENTITY(1,1)" [not null]
+  "warehouse_id" INT [not null]
+  "product_id" INT [not null]
+  "batch_id" INT [not null]
+  "quantity_on_hand" DECIMAL(18,3) [not null, default: 0]
+  "quantity_reserved" DECIMAL(18,3) [not null, default: 0]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `quantity_on_hand >= 0
+    AND quantity_reserved >= 0
+    AND quantity_reserved <= quantity_on_hand` [name: 'CK_batch_stock_quantities']
+  }
+
+  Indexes {
+    batch_stock_id [pk, name: "PK_batch_stock"]
+    (warehouse_id, batch_id) [unique, name: "UQ_batch_stock_warehouse_batch"]
+    (product_id, warehouse_id) [name: "IX_batch_stock_product_warehouse"]
+  }
+}
+
+Table "inventory"."inventory_movements" {
+  "inventory_movement_id" "INT IDENTITY(1,1)" [not null]
+  "warehouse_id" INT [not null]
+  "product_id" INT [not null]
+  "batch_id" INT
+  "movement_type" NVARCHAR(30) [not null]
+  "movement_date" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "quantity" DECIMAL(18,3) [not null]
+  "unit_cost" DECIMAL(18,4) [not null]
+  "total_cost" DECIMAL(19,4) [not null]
+  "balance_quantity" DECIMAL(18,3) [not null]
+  "balance_value" DECIMAL(19,4) [not null]
+  "reference_type" NVARCHAR(50)
+  "reference_id" INT
+  "notes" NVARCHAR(500)
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+
+  Checks {
+    `movement_type IN (
+        'PURCHASE_RECEIPT',
+        'SALE_DISPATCH',
+        'TRANSFER_IN',
+        'TRANSFER_OUT',
+        'ADJUSTMENT_IN',
+        'ADJUSTMENT_OUT',
+        'RETURN_IN',
+        'RETURN_OUT'
+    )` [name: 'CK_inventory_movements_type']
+    `(movement_type IN (
+        'PURCHASE_RECEIPT',
+        'TRANSFER_IN',
+        'ADJUSTMENT_IN',
+        'RETURN_IN'
+    ) AND quantity > 0)
+    OR
+    (movement_type IN (
+        'SALE_DISPATCH',
+        'TRANSFER_OUT',
+        'ADJUSTMENT_OUT',
+        'RETURN_OUT'
+    ) AND quantity < 0)` [name: 'CK_inventory_movements_quantity']
+    `unit_cost >= 0
+    AND total_cost = ROUND(quantity * unit_cost, 4)
+    AND balance_quantity >= 0
+    AND balance_value >= 0` [name: 'CK_inventory_movements_cost']
+  }
+
+  Indexes {
+    inventory_movement_id [pk, name: "PK_inventory_movements"]
+    (product_id, movement_date, inventory_movement_id) [name: "IX_inventory_movements_product_date"]
+    (warehouse_id, product_id, movement_date) [name: "IX_inventory_movements_warehouse_product_date"]
+  }
+}
+
+Table "purchasing"."suppliers" {
+  "supplier_id" "INT IDENTITY(1,1)" [not null]
+  "tax_id" NVARCHAR(20) [not null]
+  "business_name" NVARCHAR(200) [not null]
+  "contact_name" NVARCHAR(150)
+  "phone" NVARCHAR(30)
+  "email" NVARCHAR(255)
+  "address" NVARCHAR(300)
+  "credit_days" INT [not null, default: 0]
+  "credit_limit" DECIMAL(18,2) [not null, default: 0]
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `credit_days >= 0` [name: 'CK_suppliers_credit_days']
+    `credit_limit >= 0` [name: 'CK_suppliers_credit_limit']
+  }
+
+  Indexes {
+    supplier_id [pk, name: "PK_suppliers"]
+    tax_id [unique, name: "UQ_suppliers_tax_id"]
+  }
+}
+
+Table "purchasing"."product_suppliers" {
+  "product_supplier_id" "INT IDENTITY(1,1)" [not null]
+  "product_id" INT [not null]
+  "supplier_id" INT [not null]
+  "is_preferred" BIT [not null, default: 0]
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    product_supplier_id [pk, name: "PK_product_suppliers"]
+    (product_id, supplier_id) [unique, name: "UQ_product_suppliers_product_supplier"]
+    product_id [unique, name: "UX_product_suppliers_preferred"]
+    supplier_id [name: "IX_product_suppliers_supplier_id"]
+  }
+}
+
+Table "purchasing"."purchase_orders" {
+  "purchase_order_id" "INT IDENTITY(1,1)" [not null]
+  "order_number" NVARCHAR(50) [not null]
+  "supplier_id" INT [not null]
+  "order_date" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "expected_date" DATE
+  "status" NVARCHAR(20) [not null, default: 'DRAFT']
+  "subtotal" DECIMAL(18,2) [not null, default: 0]
+  "tax_amount" DECIMAL(18,2) [not null, default: 0]
+  "total_amount" DECIMAL(18,2) [not null, default: 0]
+  "notes" NVARCHAR(500)
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `status IN (
+        'DRAFT',
+        'APPROVED',
+        'PARTIALLY_RECEIVED',
+        'RECEIVED',
+        'CANCELLED'
+    )` [name: 'CK_purchase_orders_status']
+    `subtotal >= 0
+    AND tax_amount >= 0
+    AND total_amount = subtotal + tax_amount` [name: 'CK_purchase_orders_amounts']
+  }
+
+  Indexes {
+    purchase_order_id [pk, name: "PK_purchase_orders"]
+    order_number [unique, name: "UQ_purchase_orders_order_number"]
+    (supplier_id, order_date) [name: "IX_purchase_orders_supplier_date"]
+  }
+}
+
+Table "purchasing"."purchase_order_details" {
+  "purchase_order_detail_id" "INT IDENTITY(1,1)" [not null]
+  "purchase_order_id" INT [not null]
+  "product_id" INT [not null]
+  "quantity" DECIMAL(18,3) [not null]
+  "unit_cost" DECIMAL(18,4) [not null]
+  "discount_amount" DECIMAL(18,2) [not null, default: 0]
+  "subtotal" DECIMAL(18,2) [not null, default: 0]
+  "tax_amount" DECIMAL(18,2) [not null, default: 0]
+  "total_amount" DECIMAL(18,2) [not null, default: 0]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `quantity > 0` [name: 'CK_purchase_order_details_quantity']
+    `unit_cost >= 0
+    AND discount_amount >= 0
+    AND subtotal >= 0
+    AND tax_amount >= 0
+    AND total_amount = subtotal + tax_amount` [name: 'CK_purchase_order_details_amounts']
+  }
+
+  Indexes {
+    purchase_order_detail_id [pk, name: "PK_purchase_order_details"]
+    (purchase_order_id, product_id) [unique, name: "UQ_purchase_order_details_order_product"]
+    (purchase_order_detail_id, purchase_order_id) [unique, name: "UQ_purchase_order_details_id_order"]
+    product_id [name: "IX_purchase_order_details_product_id"]
+  }
+}
+
+Table "purchasing"."goods_receipts" {
+  "goods_receipt_id" "INT IDENTITY(1,1)" [not null]
+  "receipt_number" NVARCHAR(50) [not null]
+  "purchase_order_id" INT [not null]
+  "warehouse_id" INT [not null]
+  "receipt_date" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "status" NVARCHAR(20) [not null, default: 'DRAFT']
+  "notes" NVARCHAR(500)
+  "confirmed_at" DATETIME2(3)
+  "confirmed_by" INT
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `status IN (
+        'DRAFT',
+        'CONFIRMED',
+        'CANCELLED'
+    )` [name: 'CK_goods_receipts_status']
+  }
+
+  Indexes {
+    goods_receipt_id [pk, name: "PK_goods_receipts"]
+    receipt_number [unique, name: "UQ_goods_receipts_number"]
+    (goods_receipt_id, purchase_order_id) [unique, name: "UQ_goods_receipts_id_order"]
+    purchase_order_id [name: "IX_goods_receipts_purchase_order_id"]
+    (warehouse_id, receipt_date) [name: "IX_goods_receipts_warehouse_date"]
+  }
+}
+
+Table "purchasing"."goods_receipt_details" {
+  "goods_receipt_detail_id" "INT IDENTITY(1,1)" [not null]
+  "goods_receipt_id" INT [not null]
+  "purchase_order_id" INT [not null]
+  "purchase_order_detail_id" INT [not null]
+  "batch_id" INT [not null]
+  "product_id" INT [not null]
+  "quantity_received" DECIMAL(18,3) [not null]
+  "unit_cost" DECIMAL(18,4) [not null]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+
+  Checks {
+    `quantity_received > 0` [name: 'CK_goods_receipt_details_quantity']
+    `unit_cost >= 0` [name: 'CK_goods_receipt_details_unit_cost']
+  }
+
+  Indexes {
+    goods_receipt_detail_id [pk, name: "PK_goods_receipt_details"]
+    (goods_receipt_id, purchase_order_detail_id, batch_id) [unique, name: "UQ_goods_receipt_details_receipt_order_batch"]
+    purchase_order_detail_id [name: "IX_goods_receipt_details_order_detail"]
+    batch_id [name: "IX_goods_receipt_details_batch_id"]
+  }
+}
+
+Table "purchasing"."supplier_invoices" {
+  "supplier_invoice_id" "INT IDENTITY(1,1)" [not null]
+  "supplier_id" INT [not null]
+  "purchase_order_id" INT [not null]
+  "invoice_number" NVARCHAR(50) [not null]
+  "invoice_date" DATE [not null]
+  "due_date" DATE [not null]
+  "subtotal" DECIMAL(18,2) [not null]
+  "tax_amount" DECIMAL(18,2) [not null]
+  "total_amount" DECIMAL(18,2) [not null]
+  "status" NVARCHAR(20) [not null, default: 'REGISTERED']
+  "notes" NVARCHAR(500)
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `due_date >= invoice_date` [name: 'CK_supplier_invoices_dates']
+    `subtotal >= 0
+    AND tax_amount >= 0
+    AND total_amount = subtotal + tax_amount` [name: 'CK_supplier_invoices_amounts']
+    `status IN (
+        'REGISTERED',
+        'CANCELLED'
+    )` [name: 'CK_supplier_invoices_status']
+  }
+
+  Indexes {
+    supplier_invoice_id [pk, name: "PK_supplier_invoices"]
+    (supplier_id, invoice_number) [unique, name: "UQ_supplier_invoices_supplier_number"]
+    purchase_order_id [name: "IX_supplier_invoices_purchase_order_id"]
+    due_date [name: "IX_supplier_invoices_due_date"]
+  }
+}
+
+Table "sales"."price_lists" {
+  "price_list_id" "INT IDENTITY(1,1)" [not null]
+  "code" NVARCHAR(50) [not null]
+  "name" NVARCHAR(150) [not null]
+  "description" NVARCHAR(500)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    price_list_id [pk, name: "PK_price_lists"]
+    code [unique, name: "UQ_price_lists_code"]
+  }
+}
+
+Table "sales"."price_list_details" {
+  "price_list_detail_id" "INT IDENTITY(1,1)" [not null]
+  "price_list_id" INT [not null]
+  "product_id" INT [not null]
+  "unit_price" DECIMAL(18,4) [not null]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `unit_price >= 0` [name: 'CK_price_list_details_unit_price']
+  }
+
+  Indexes {
+    price_list_detail_id [pk, name: "PK_price_list_details"]
+    (price_list_id, product_id) [unique, name: "UQ_price_list_details_list_product"]
+    product_id [name: "IX_price_list_details_product_id"]
+  }
+}
+
+Table "sales"."salespersons" {
+  "salesperson_id" "INT IDENTITY(1,1)" [not null]
+  "user_id" INT [not null]
+  "employee_code" NVARCHAR(30) [not null]
+  "phone" NVARCHAR(30)
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Indexes {
+    salesperson_id [pk, name: "PK_salespersons"]
+    user_id [unique, name: "UQ_salespersons_user_id"]
+    employee_code [unique, name: "UQ_salespersons_employee_code"]
+  }
+}
+
+Table "sales"."customers" {
+  "customer_id" "INT IDENTITY(1,1)" [not null]
+  "customer_code" NVARCHAR(50) [not null]
+  "tax_id" NVARCHAR(20) [not null]
+  "business_name" NVARCHAR(200) [not null]
+  "customer_type" NVARCHAR(20) [not null]
+  "contact_name" NVARCHAR(150)
+  "phone" NVARCHAR(30)
+  "email" NVARCHAR(255)
+  "address" NVARCHAR(300)
+  "salesperson_id" INT [not null]
+  "price_list_id" INT [not null]
+  "credit_days" INT [not null, default: 0]
+  "credit_limit" DECIMAL(18,2) [not null, default: 0]
+  "is_credit_blocked" BIT [not null, default: 0]
+  "is_active" BIT [not null, default: 1]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `customer_type IN (
+        'WHOLESALE',
+        'RETAIL',
+        'CHAIN'
+    )` [name: 'CK_customers_type']
+    `credit_days IN (0, 15, 30, 60)` [name: 'CK_customers_credit_days']
+    `credit_limit >= 0` [name: 'CK_customers_credit_limit']
+  }
+
+  Indexes {
+    customer_id [pk, name: "PK_customers"]
+    customer_code [unique, name: "UQ_customers_code"]
+    salesperson_id [name: "IX_customers_salesperson_id"]
+    price_list_id [name: "IX_customers_price_list_id"]
+  }
+}
+
+Table "sales"."sales_orders" {
+  "sales_order_id" "INT IDENTITY(1,1)" [not null]
+  "order_number" NVARCHAR(50) [not null]
+  "customer_id" INT [not null]
+  "salesperson_id" INT [not null]
+  "warehouse_id" INT [not null]
+  "order_date" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "status" NVARCHAR(30) [not null, default: 'DRAFT']
+  "credit_status" NVARCHAR(20) [not null, default: 'PENDING']
+  "credit_authorized_at" DATETIME2(3)
+  "credit_authorized_by" INT
+  "subtotal" DECIMAL(18,2) [not null, default: 0]
+  "discount_amount" DECIMAL(18,2) [not null, default: 0]
+  "tax_amount" DECIMAL(18,2) [not null, default: 0]
+  "total_amount" DECIMAL(18,2) [not null, default: 0]
+  "notes" NVARCHAR(500)
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `status IN (
+        'DRAFT',
+        'PENDING',
+        'APPROVED',
+        'RESERVED',
+        'COMPLETED',
+        'CANCELLED'
+    )` [name: 'CK_sales_orders_status']
+    `credit_status IN (
+        'PENDING',
+        'APPROVED',
+        'REJECTED'
+    )` [name: 'CK_sales_orders_credit_status']
+    `subtotal >= 0
+    AND discount_amount >= 0
+    AND discount_amount <= subtotal
+    AND tax_amount >= 0
+    AND total_amount = subtotal - discount_amount + tax_amount` [name: 'CK_sales_orders_amounts']
+  }
+
+  Indexes {
+    sales_order_id [pk, name: "PK_sales_orders"]
+    order_number [unique, name: "UQ_sales_orders_number"]
+    (customer_id, order_date) [name: "IX_sales_orders_customer_date"]
+    (salesperson_id, order_date) [name: "IX_sales_orders_salesperson_date"]
+    status [name: "IX_sales_orders_status"]
+  }
+}
+
+Table "sales"."sales_order_details" {
+  "sales_order_detail_id" "INT IDENTITY(1,1)" [not null]
+  "sales_order_id" INT [not null]
+  "product_id" INT [not null]
+  "quantity" DECIMAL(18,3) [not null]
+  "quantity_reserved" DECIMAL(18,3) [not null, default: 0]
+  "unit_price" DECIMAL(18,4) [not null]
+  "discount_amount" DECIMAL(18,2) [not null, default: 0]
+  "subtotal" DECIMAL(18,2) [not null, default: 0]
+  "tax_amount" DECIMAL(18,2) [not null, default: 0]
+  "total_amount" DECIMAL(18,2) [not null, default: 0]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `quantity > 0
+    AND quantity_reserved >= 0
+    AND quantity_reserved <= quantity` [name: 'CK_sales_order_details_quantities']
+    `unit_price >= 0
+    AND discount_amount >= 0
+    AND subtotal >= 0
+    AND discount_amount <= subtotal
+    AND tax_amount >= 0
+    AND total_amount = subtotal - discount_amount + tax_amount` [name: 'CK_sales_order_details_amounts']
+  }
+
+  Indexes {
+    sales_order_detail_id [pk, name: "PK_sales_order_details"]
+    (sales_order_id, product_id) [unique, name: "UQ_sales_order_details_order_product"]
+    product_id [name: "IX_sales_order_details_product_id"]
+  }
+}
+
+Table "sales"."sales_invoices" {
+  "sales_invoice_id" "INT IDENTITY(1,1)" [not null]
+  "sales_order_id" INT [not null]
+  "customer_id" INT [not null]
+  "salesperson_id" INT [not null]
+  "invoice_series" NVARCHAR(50) [not null]
+  "invoice_number" NVARCHAR(50) [not null]
+  "dte_uuid" NVARCHAR(100)
+  "invoice_date" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "due_date" DATE [not null]
+  "subtotal" DECIMAL(18,2) [not null, default: 0]
+  "discount_amount" DECIMAL(18,2) [not null, default: 0]
+  "tax_amount" DECIMAL(18,2) [not null, default: 0]
+  "total_amount" DECIMAL(18,2) [not null, default: 0]
+  "status" NVARCHAR(20) [not null, default: 'ISSUED']
+  "cancellation_reason" NVARCHAR(500)
+  "cancelled_at" DATETIME2(3)
+  "cancelled_by" INT
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `status IN (
+        'ISSUED',
+        'CANCELLED'
+    )` [name: 'CK_sales_invoices_status']
+    `subtotal >= 0
+    AND discount_amount >= 0
+    AND discount_amount <= subtotal
+    AND tax_amount >= 0
+    AND total_amount = subtotal - discount_amount + tax_amount` [name: 'CK_sales_invoices_amounts']
+    `status <> 'CANCELLED'
+    OR (
+        cancellation_reason IS NOT NULL
+        AND cancelled_at IS NOT NULL
+        AND cancelled_by IS NOT NULL
+    )` [name: 'CK_sales_invoices_cancellation']
+  }
+
+  Indexes {
+    sales_invoice_id [pk, name: "PK_sales_invoices"]
+    sales_order_id [unique, name: "UQ_sales_invoices_order"]
+    (invoice_series, invoice_number) [unique, name: "UQ_sales_invoices_series_number"]
+    dte_uuid [unique, name: "UX_sales_invoices_dte_uuid"]
+    (invoice_date, status) [name: "IX_sales_invoices_invoice_date_status"]
+    (customer_id, due_date) [name: "IX_sales_invoices_customer_due_date"]
+  }
+}
+
+Table "sales"."sales_invoice_details" {
+  "sales_invoice_detail_id" "INT IDENTITY(1,1)" [not null]
+  "sales_invoice_id" INT [not null]
+  "product_id" INT [not null]
+  "quantity" DECIMAL(18,3) [not null]
+  "unit_price" DECIMAL(18,4) [not null]
+  "unit_cost" DECIMAL(18,4) [not null]
+  "discount_amount" DECIMAL(18,2) [not null, default: 0]
+  "subtotal" DECIMAL(18,2) [not null, default: 0]
+  "tax_amount" DECIMAL(18,2) [not null, default: 0]
+  "total_amount" DECIMAL(18,2) [not null, default: 0]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+
+  Checks {
+    `quantity > 0` [name: 'CK_sales_invoice_details_quantity']
+    `unit_price >= 0
+    AND unit_cost >= 0
+    AND discount_amount >= 0
+    AND subtotal >= 0
+    AND discount_amount <= subtotal
+    AND tax_amount >= 0
+    AND total_amount = subtotal - discount_amount + tax_amount` [name: 'CK_sales_invoice_details_amounts']
+  }
+
+  Indexes {
+    sales_invoice_detail_id [pk, name: "PK_sales_invoice_details"]
+    (sales_invoice_id, product_id) [unique, name: "UQ_sales_invoice_details_invoice_product"]
+    product_id [name: "IX_sales_invoice_details_product_id"]
+  }
+}
+
+Table "sales"."sales_targets" {
+  "sales_target_id" "INT IDENTITY(1,1)" [not null]
+  "salesperson_id" INT [not null]
+  "target_year" SMALLINT [not null]
+  "target_month" TINYINT [not null]
+  "target_amount" DECIMAL(18,2) [not null]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `target_year BETWEEN 2000 AND 2100` [name: 'CK_sales_targets_year']
+    `target_month BETWEEN 1 AND 12` [name: 'CK_sales_targets_month']
+    `target_amount >= 0` [name: 'CK_sales_targets_amount']
+  }
+
+  Indexes {
+    sales_target_id [pk, name: "PK_sales_targets"]
+    (salesperson_id, target_year, target_month) [unique, name: "UQ_sales_targets_salesperson_period"]
+  }
+}
+
+Table "logistics"."warehouse_transfers" {
+  "warehouse_transfer_id" "INT IDENTITY(1,1)" [not null]
+  "transfer_number" NVARCHAR(50) [not null]
+  "source_warehouse_id" INT [not null]
+  "destination_warehouse_id" INT [not null]
+  "transfer_date" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "status" NVARCHAR(20) [not null, default: 'DRAFT']
+  "dispatched_at" DATETIME2(3)
+  "dispatched_by" INT
+  "received_at" DATETIME2(3)
+  "received_by" INT
+  "notes" NVARCHAR(500)
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `source_warehouse_id <> destination_warehouse_id` [name: 'CK_warehouse_transfers_different_warehouses']
+    `status IN (
+        'DRAFT',
+        'IN_TRANSIT',
+        'RECEIVED',
+        'CANCELLED'
+    )` [name: 'CK_warehouse_transfers_status']
+    `(dispatched_at IS NULL OR dispatched_at >= transfer_date)
+    AND
+    (
+        received_at IS NULL
+        OR (
+            dispatched_at IS NOT NULL
+            AND received_at >= dispatched_at
+        )
+    )` [name: 'CK_warehouse_transfers_dates']
+    `status NOT IN ('IN_TRANSIT', 'RECEIVED')
+    OR dispatched_at IS NOT NULL` [name: 'CK_warehouse_transfers_status_dates']
+  }
+
+  Indexes {
+    warehouse_transfer_id [pk, name: "PK_warehouse_transfers"]
+    transfer_number [unique, name: "UQ_warehouse_transfers_number"]
+    (status, dispatched_at) [name: "IX_warehouse_transfers_status_dispatched"]
+    source_warehouse_id [name: "IX_warehouse_transfers_source"]
+    destination_warehouse_id [name: "IX_warehouse_transfers_destination"]
+  }
+}
+
+Table "logistics"."warehouse_transfer_details" {
+  "warehouse_transfer_detail_id" "INT IDENTITY(1,1)" [not null]
+  "warehouse_transfer_id" INT [not null]
+  "product_id" INT [not null]
+  "batch_id" INT [not null]
+  "quantity" DECIMAL(18,3) [not null]
+  "unit_cost" DECIMAL(18,4) [not null]
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+
+  Checks {
+    `quantity > 0` [name: 'CK_warehouse_transfer_details_quantity']
+    `unit_cost >= 0` [name: 'CK_warehouse_transfer_details_unit_cost']
+  }
+
+  Indexes {
+    warehouse_transfer_detail_id [pk, name: "PK_warehouse_transfer_details"]
+    (warehouse_transfer_id, batch_id) [unique, name: "UQ_warehouse_transfer_details_transfer_batch"]
+    product_id [name: "IX_warehouse_transfer_details_product"]
+    batch_id [name: "IX_warehouse_transfer_details_batch"]
+  }
+}
+
+Table "finance"."accounts_receivable" {
+  "account_receivable_id" "INT IDENTITY(1,1)" [not null]
+  "sales_invoice_id" INT [not null]
+  "customer_id" INT [not null]
+  "original_amount" DECIMAL(18,2) [not null]
+  "outstanding_balance" DECIMAL(18,2) [not null]
+  "due_date" DATE [not null]
+  "status" NVARCHAR(20) [not null, default: 'PENDING']
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `original_amount >= 0
+                                                         AND outstanding_balance >= 0
+                                                         AND outstanding_balance <= original_amount` [name: 'CK_accounts_receivable_amounts']
+    `status IN ('PENDING', 'PARTIALLY_PAID', 'PAID', 'CANCELLED')` [name: 'CK_accounts_receivable_status']
+  }
+
+  Indexes {
+    account_receivable_id [pk, name: "PK_accounts_receivable"]
+    sales_invoice_id [unique, name: "UQ_accounts_receivable_sales_invoice"]
+    (customer_id, status) [name: "IX_accounts_receivable_customer_status"]
+    (due_date, outstanding_balance) [name: "IX_accounts_receivable_due_date"]
+  }
+}
+
+Table "finance"."customer_payments" {
+  "customer_payment_id" "INT IDENTITY(1,1)" [not null]
+  "account_receivable_id" INT [not null]
+  "payment_number" NVARCHAR(50) [not null]
+  "payment_date" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "amount" DECIMAL(18,2) [not null]
+  "payment_method" NVARCHAR(20) [not null]
+  "reference_number" NVARCHAR(100)
+  "notes" NVARCHAR(500)
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+
+  Checks {
+    `amount > 0` [name: 'CK_customer_payments_amount']
+    `payment_method IN ('CASH', 'TRANSFER', 'CARD', 'CHECK')` [name: 'CK_customer_payments_method']
+  }
+
+  Indexes {
+    customer_payment_id [pk, name: "PK_customer_payments"]
+    payment_number [unique, name: "UQ_customer_payments_number"]
+    account_receivable_id [name: "IX_customer_payments_account_receivable"]
+    payment_date [name: "IX_customer_payments_payment_date"]
+  }
+}
+
+Table "finance"."accounts_payable" {
+  "account_payable_id" "INT IDENTITY(1,1)" [not null]
+  "supplier_invoice_id" INT [not null]
+  "supplier_id" INT [not null]
+  "original_amount" DECIMAL(18,2) [not null]
+  "outstanding_balance" DECIMAL(18,2) [not null]
+  "due_date" DATE [not null]
+  "status" NVARCHAR(20) [not null, default: 'PENDING']
+  "created_at" DATETIME2(3) [not null, default: `SYSUTCDATETIME()`]
+  "created_by" INT [not null]
+  "updated_at" DATETIME2(3)
+  "updated_by" INT
+
+  Checks {
+    `original_amount >= 0
+                                                      AND outstanding_balance >= 0
+                                                      AND outstanding_balance <= original_amount` [name: 'CK_accounts_payable_amounts']
+    `status IN ('PENDING', 'PARTIALLY_PAID', 'PAID', 'CANCELLED')` [name: 'CK_accounts_payable_status']
+  }
+
+  Indexes {
+    account_payable_id [pk, name: "PK_accounts_payable"]
+    supplier_invoice_id [unique, name: "UQ_accounts_payable_supplier_invoice"]
+    (supplier_id, status) [name: "IX_accounts_payable_supplier_status"]
+    (due_date, outstanding_balance) [name: "IX_accounts_payable_due_date"]
+  }
+}
+
+Ref "FK_user_roles_users":"security"."users"."user_id" < "security"."user_roles"."user_id"
+
+Ref "FK_user_roles_roles":"security"."roles"."role_id" < "security"."user_roles"."role_id"
+
+Ref "FK_role_permissions_roles":"security"."roles"."role_id" < "security"."role_permissions"."role_id"
+
+Ref "FK_role_permissions_permissions":"security"."permissions"."permission_id" < "security"."role_permissions"."permission_id"
+
+Ref "FK_menu_items_parent":"navigation"."menu_items"."menu_item_id" < "navigation"."menu_items"."parent_id"
+
+Ref "FK_role_menu_items_roles":"security"."roles"."role_id" < "navigation"."role_menu_items"."role_id"
+
+Ref "FK_role_menu_items_menu_items":"navigation"."menu_items"."menu_item_id" < "navigation"."role_menu_items"."menu_item_id"
+
+Ref "FK_brands_created_by":"security"."users"."user_id" < "catalog"."brands"."created_by"
+
+Ref "FK_brands_updated_by":"security"."users"."user_id" < "catalog"."brands"."updated_by"
+
+Ref "FK_categories_created_by":"security"."users"."user_id" < "catalog"."categories"."created_by"
+
+Ref "FK_categories_updated_by":"security"."users"."user_id" < "catalog"."categories"."updated_by"
+
+Ref "FK_product_lines_categories":"catalog"."categories"."category_id" < "catalog"."product_lines"."category_id"
+
+Ref "FK_product_lines_created_by":"security"."users"."user_id" < "catalog"."product_lines"."created_by"
+
+Ref "FK_product_lines_updated_by":"security"."users"."user_id" < "catalog"."product_lines"."updated_by"
+
+Ref "FK_units_of_measure_created_by":"security"."users"."user_id" < "catalog"."units_of_measure"."created_by"
+
+Ref "FK_units_of_measure_updated_by":"security"."users"."user_id" < "catalog"."units_of_measure"."updated_by"
+
+Ref "FK_products_brands":"catalog"."brands"."brand_id" < "catalog"."products"."brand_id"
+
+Ref "FK_products_product_lines":"catalog"."product_lines"."product_line_id" < "catalog"."products"."product_line_id"
+
+Ref "FK_products_units_of_measure":"catalog"."units_of_measure"."unit_of_measure_id" < "catalog"."products"."unit_of_measure_id"
+
+Ref "FK_products_created_by":"security"."users"."user_id" < "catalog"."products"."created_by"
+
+Ref "FK_products_updated_by":"security"."users"."user_id" < "catalog"."products"."updated_by"
+
+Ref "FK_warehouses_created_by":"security"."users"."user_id" < "inventory"."warehouses"."created_by"
+
+Ref "FK_warehouses_updated_by":"security"."users"."user_id" < "inventory"."warehouses"."updated_by"
+
+Ref "FK_product_batches_products":"catalog"."products"."product_id" < "inventory"."product_batches"."product_id"
+
+Ref "FK_product_batches_created_by":"security"."users"."user_id" < "inventory"."product_batches"."created_by"
+
+Ref "FK_product_batches_updated_by":"security"."users"."user_id" < "inventory"."product_batches"."updated_by"
+
+Ref "FK_warehouse_stock_warehouses":"inventory"."warehouses"."warehouse_id" < "inventory"."warehouse_stock"."warehouse_id"
+
+Ref "FK_warehouse_stock_products":"catalog"."products"."product_id" < "inventory"."warehouse_stock"."product_id"
+
+Ref "FK_warehouse_stock_updated_by":"security"."users"."user_id" < "inventory"."warehouse_stock"."updated_by"
+
+Ref "FK_batch_stock_warehouses":"inventory"."warehouses"."warehouse_id" < "inventory"."batch_stock"."warehouse_id"
+
+Ref "FK_batch_stock_batches":"inventory"."product_batches".("batch_id", "product_id") < "inventory"."batch_stock".("batch_id", "product_id")
+
+Ref "FK_batch_stock_updated_by":"security"."users"."user_id" < "inventory"."batch_stock"."updated_by"
+
+Ref "FK_inventory_movements_warehouses":"inventory"."warehouses"."warehouse_id" < "inventory"."inventory_movements"."warehouse_id"
+
+Ref "FK_inventory_movements_products":"catalog"."products"."product_id" < "inventory"."inventory_movements"."product_id"
+
+Ref "FK_inventory_movements_batches":"inventory"."product_batches".("batch_id", "product_id") < "inventory"."inventory_movements".("batch_id", "product_id")
+
+Ref "FK_inventory_movements_created_by":"security"."users"."user_id" < "inventory"."inventory_movements"."created_by"
+
+Ref "FK_suppliers_created_by":"security"."users"."user_id" < "purchasing"."suppliers"."created_by"
+
+Ref "FK_suppliers_updated_by":"security"."users"."user_id" < "purchasing"."suppliers"."updated_by"
+
+Ref "FK_product_suppliers_products":"catalog"."products"."product_id" < "purchasing"."product_suppliers"."product_id"
+
+Ref "FK_product_suppliers_suppliers":"purchasing"."suppliers"."supplier_id" < "purchasing"."product_suppliers"."supplier_id"
+
+Ref "FK_product_suppliers_created_by":"security"."users"."user_id" < "purchasing"."product_suppliers"."created_by"
+
+Ref "FK_product_suppliers_updated_by":"security"."users"."user_id" < "purchasing"."product_suppliers"."updated_by"
+
+Ref "FK_purchase_orders_suppliers":"purchasing"."suppliers"."supplier_id" < "purchasing"."purchase_orders"."supplier_id"
+
+Ref "FK_purchase_orders_created_by":"security"."users"."user_id" < "purchasing"."purchase_orders"."created_by"
+
+Ref "FK_purchase_orders_updated_by":"security"."users"."user_id" < "purchasing"."purchase_orders"."updated_by"
+
+Ref "FK_purchase_order_details_orders":"purchasing"."purchase_orders"."purchase_order_id" < "purchasing"."purchase_order_details"."purchase_order_id"
+
+Ref "FK_purchase_order_details_products":"catalog"."products"."product_id" < "purchasing"."purchase_order_details"."product_id"
+
+Ref "FK_purchase_order_details_created_by":"security"."users"."user_id" < "purchasing"."purchase_order_details"."created_by"
+
+Ref "FK_purchase_order_details_updated_by":"security"."users"."user_id" < "purchasing"."purchase_order_details"."updated_by"
+
+Ref "FK_goods_receipts_purchase_orders":"purchasing"."purchase_orders"."purchase_order_id" < "purchasing"."goods_receipts"."purchase_order_id"
+
+Ref "FK_goods_receipts_warehouses":"inventory"."warehouses"."warehouse_id" < "purchasing"."goods_receipts"."warehouse_id"
+
+Ref "FK_goods_receipts_confirmed_by":"security"."users"."user_id" < "purchasing"."goods_receipts"."confirmed_by"
+
+Ref "FK_goods_receipts_created_by":"security"."users"."user_id" < "purchasing"."goods_receipts"."created_by"
+
+Ref "FK_goods_receipts_updated_by":"security"."users"."user_id" < "purchasing"."goods_receipts"."updated_by"
+
+Ref "FK_goods_receipt_details_receipts":"purchasing"."goods_receipts".("goods_receipt_id", "purchase_order_id") < "purchasing"."goods_receipt_details".("goods_receipt_id", "purchase_order_id")
+
+Ref "FK_goods_receipt_details_order_details":"purchasing"."purchase_order_details".("purchase_order_detail_id", "purchase_order_id") < "purchasing"."goods_receipt_details".("purchase_order_detail_id", "purchase_order_id")
+
+Ref "FK_goods_receipt_details_batches":"inventory"."product_batches".("batch_id", "product_id") < "purchasing"."goods_receipt_details".("batch_id", "product_id")
+
+Ref "FK_goods_receipt_details_created_by":"security"."users"."user_id" < "purchasing"."goods_receipt_details"."created_by"
+
+Ref "FK_supplier_invoices_suppliers":"purchasing"."suppliers"."supplier_id" < "purchasing"."supplier_invoices"."supplier_id"
+
+Ref "FK_supplier_invoices_purchase_orders":"purchasing"."purchase_orders"."purchase_order_id" < "purchasing"."supplier_invoices"."purchase_order_id"
+
+Ref "FK_supplier_invoices_created_by":"security"."users"."user_id" < "purchasing"."supplier_invoices"."created_by"
+
+Ref "FK_supplier_invoices_updated_by":"security"."users"."user_id" < "purchasing"."supplier_invoices"."updated_by"
+
+Ref "FK_price_lists_created_by":"security"."users"."user_id" < "sales"."price_lists"."created_by"
+
+Ref "FK_price_lists_updated_by":"security"."users"."user_id" < "sales"."price_lists"."updated_by"
+
+Ref "FK_price_list_details_price_lists":"sales"."price_lists"."price_list_id" < "sales"."price_list_details"."price_list_id"
+
+Ref "FK_price_list_details_products":"catalog"."products"."product_id" < "sales"."price_list_details"."product_id"
+
+Ref "FK_price_list_details_created_by":"security"."users"."user_id" < "sales"."price_list_details"."created_by"
+
+Ref "FK_price_list_details_updated_by":"security"."users"."user_id" < "sales"."price_list_details"."updated_by"
+
+Ref "FK_salespersons_users":"security"."users"."user_id" < "sales"."salespersons"."user_id"
+
+Ref "FK_salespersons_created_by":"security"."users"."user_id" < "sales"."salespersons"."created_by"
+
+Ref "FK_salespersons_updated_by":"security"."users"."user_id" < "sales"."salespersons"."updated_by"
+
+Ref "FK_customers_salespersons":"sales"."salespersons"."salesperson_id" < "sales"."customers"."salesperson_id"
+
+Ref "FK_customers_price_lists":"sales"."price_lists"."price_list_id" < "sales"."customers"."price_list_id"
+
+Ref "FK_customers_created_by":"security"."users"."user_id" < "sales"."customers"."created_by"
+
+Ref "FK_customers_updated_by":"security"."users"."user_id" < "sales"."customers"."updated_by"
+
+Ref "FK_sales_orders_customers":"sales"."customers"."customer_id" < "sales"."sales_orders"."customer_id"
+
+Ref "FK_sales_orders_salespersons":"sales"."salespersons"."salesperson_id" < "sales"."sales_orders"."salesperson_id"
+
+Ref "FK_sales_orders_warehouses":"inventory"."warehouses"."warehouse_id" < "sales"."sales_orders"."warehouse_id"
+
+Ref "FK_sales_orders_credit_authorized_by":"security"."users"."user_id" < "sales"."sales_orders"."credit_authorized_by"
+
+Ref "FK_sales_orders_created_by":"security"."users"."user_id" < "sales"."sales_orders"."created_by"
+
+Ref "FK_sales_orders_updated_by":"security"."users"."user_id" < "sales"."sales_orders"."updated_by"
+
+Ref "FK_sales_order_details_orders":"sales"."sales_orders"."sales_order_id" < "sales"."sales_order_details"."sales_order_id"
+
+Ref "FK_sales_order_details_products":"catalog"."products"."product_id" < "sales"."sales_order_details"."product_id"
+
+Ref "FK_sales_order_details_created_by":"security"."users"."user_id" < "sales"."sales_order_details"."created_by"
+
+Ref "FK_sales_order_details_updated_by":"security"."users"."user_id" < "sales"."sales_order_details"."updated_by"
+
+Ref "FK_sales_invoices_orders":"sales"."sales_orders"."sales_order_id" < "sales"."sales_invoices"."sales_order_id"
+
+Ref "FK_sales_invoices_customers":"sales"."customers"."customer_id" < "sales"."sales_invoices"."customer_id"
+
+Ref "FK_sales_invoices_salespersons":"sales"."salespersons"."salesperson_id" < "sales"."sales_invoices"."salesperson_id"
+
+Ref "FK_sales_invoices_cancelled_by":"security"."users"."user_id" < "sales"."sales_invoices"."cancelled_by"
+
+Ref "FK_sales_invoices_created_by":"security"."users"."user_id" < "sales"."sales_invoices"."created_by"
+
+Ref "FK_sales_invoices_updated_by":"security"."users"."user_id" < "sales"."sales_invoices"."updated_by"
+
+Ref "FK_sales_invoice_details_invoices":"sales"."sales_invoices"."sales_invoice_id" < "sales"."sales_invoice_details"."sales_invoice_id"
+
+Ref "FK_sales_invoice_details_products":"catalog"."products"."product_id" < "sales"."sales_invoice_details"."product_id"
+
+Ref "FK_sales_invoice_details_created_by":"security"."users"."user_id" < "sales"."sales_invoice_details"."created_by"
+
+Ref "FK_sales_targets_salespersons":"sales"."salespersons"."salesperson_id" < "sales"."sales_targets"."salesperson_id"
+
+Ref "FK_sales_targets_created_by":"security"."users"."user_id" < "sales"."sales_targets"."created_by"
+
+Ref "FK_sales_targets_updated_by":"security"."users"."user_id" < "sales"."sales_targets"."updated_by"
+
+Ref "FK_warehouse_transfers_source_warehouse":"inventory"."warehouses"."warehouse_id" < "logistics"."warehouse_transfers"."source_warehouse_id"
+
+Ref "FK_warehouse_transfers_destination_warehouse":"inventory"."warehouses"."warehouse_id" < "logistics"."warehouse_transfers"."destination_warehouse_id"
+
+Ref "FK_warehouse_transfers_dispatched_by":"security"."users"."user_id" < "logistics"."warehouse_transfers"."dispatched_by"
+
+Ref "FK_warehouse_transfers_received_by":"security"."users"."user_id" < "logistics"."warehouse_transfers"."received_by"
+
+Ref "FK_warehouse_transfers_created_by":"security"."users"."user_id" < "logistics"."warehouse_transfers"."created_by"
+
+Ref "FK_warehouse_transfers_updated_by":"security"."users"."user_id" < "logistics"."warehouse_transfers"."updated_by"
+
+Ref "FK_warehouse_transfer_details_transfers":"logistics"."warehouse_transfers"."warehouse_transfer_id" < "logistics"."warehouse_transfer_details"."warehouse_transfer_id"
+
+Ref "FK_warehouse_transfer_details_products":"catalog"."products"."product_id" < "logistics"."warehouse_transfer_details"."product_id"
+
+Ref "FK_warehouse_transfer_details_batches":"inventory"."product_batches".("batch_id", "product_id") < "logistics"."warehouse_transfer_details".("batch_id", "product_id")
+
+Ref "FK_warehouse_transfer_details_created_by":"security"."users"."user_id" < "logistics"."warehouse_transfer_details"."created_by"
+
+Ref "FK_accounts_receivable_sales_invoices":"sales"."sales_invoices"."sales_invoice_id" < "finance"."accounts_receivable"."sales_invoice_id"
+
+Ref "FK_accounts_receivable_customers":"sales"."customers"."customer_id" < "finance"."accounts_receivable"."customer_id"
+
+Ref "FK_accounts_receivable_created_by":"security"."users"."user_id" < "finance"."accounts_receivable"."created_by"
+
+Ref "FK_accounts_receivable_updated_by":"security"."users"."user_id" < "finance"."accounts_receivable"."updated_by"
+
+Ref "FK_customer_payments_accounts_receivable":"finance"."accounts_receivable"."account_receivable_id" < "finance"."customer_payments"."account_receivable_id"
+
+Ref "FK_customer_payments_created_by":"security"."users"."user_id" < "finance"."customer_payments"."created_by"
+
+Ref "FK_accounts_payable_supplier_invoices":"purchasing"."supplier_invoices"."supplier_invoice_id" < "finance"."accounts_payable"."supplier_invoice_id"
+
+Ref "FK_accounts_payable_suppliers":"purchasing"."suppliers"."supplier_id" < "finance"."accounts_payable"."supplier_id"
+
+Ref "FK_accounts_payable_created_by":"security"."users"."user_id" < "finance"."accounts_payable"."created_by"
+
+Ref "FK_accounts_payable_updated_by":"security"."users"."user_id" < "finance"."accounts_payable"."updated_by"
