@@ -58,7 +58,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(31, 'WAREHOUSE_TRANSFERS', 'Transferencias de Almacén', '/warehouse-transfers', 'pi pi-exchange', 1, 1, SYSDATETIME(), NULL)
+(31, 'WAREHOUSE_TRANSFERS', 'Transferencias de Almacén', '/warehouse-transfers', 'pi pi-arrow-right-arrow-left', 1, 1, SYSDATETIME(), NULL)
 
 
 select * from navigation.menu_items order by menu_item_id desc

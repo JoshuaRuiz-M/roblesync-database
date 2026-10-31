@@ -34,7 +34,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(2, 'UNIT_OF_MEASURE', 'Unidades de Medida', '/units-of-measure', 'pi pi-ruler', 5, 1, SYSDATETIME(), NULL)
+(2, 'UNIT_OF_MEASURE', 'Unidades de Medida', '/units-of-measure', 'pi pi-calculator', 5, 1, SYSDATETIME(), NULL)
 GO
 
 
