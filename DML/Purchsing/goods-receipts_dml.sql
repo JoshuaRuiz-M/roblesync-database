@@ -34,7 +34,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(13, 'GOODS_RECEIPTS', 'Recepción de Mercancías', '/goods-receipts', 'pi pi-truck', 1, 1, SYSDATETIME(), NULL)
+(13, 'GOODS_RECEIPTS', 'Recepción de Mercancías', '/goods-receipts', 'pi pi-download', 1, 1, SYSDATETIME(), NULL)
 
 
 SELECT * FROM navigation.menu_items ORDER BY menu_item_id DESC

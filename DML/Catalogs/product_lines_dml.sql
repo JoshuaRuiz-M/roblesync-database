@@ -34,7 +34,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(2, 'PRODUCT_LINES', 'Líneas de producto', '/product-lines', 'pi pi-tag', 1, 1, SYSDATETIME(), NULL)
+(2, 'PRODUCT_LINES', 'Líneas de producto', '/product-lines', 'pi pi-sitemap', 3, 1, SYSDATETIME(), NULL)
 GO
 
 select * from navigation.menu_items order by menu_item_id desc

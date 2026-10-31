@@ -32,7 +32,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(NULL, 'ANALYTICS', 'Analíticas', NULL, 'pi pi-chart', 1, 1, SYSDATETIME(), NULL)
+(NULL, 'ANALYTICS', 'Analíticas', NULL, 'pi pi-chart-line', 1, 1, SYSDATETIME(), NULL)
 
 select * from navigation.menu_items order by menu_item_id desc
 
@@ -53,7 +53,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(34, 'ANALYTICS_KARDEX', 'Kardex', '/analytics/kardex', 'pi pi-file', 1, 1, SYSDATETIME(), NULL)
+(34, 'ANALYTICS_KARDEX', 'Kardex', '/analytics/kardex', 'pi pi-book', 1, 1, SYSDATETIME(), NULL)
 
 
 select * from navigation.menu_items order by menu_item_id desc
@@ -76,7 +76,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(34, 'ANALYTICS_DASHBOARD', 'Dashboard', '/analytics/dashboard', 'pi pi-chart', 1, 1, SYSDATETIME(), NULL)
+(34, 'ANALYTICS_DASHBOARD', 'Dashboard', '/analytics/dashboard', 'pi pi-chart-bar', 1, 1, SYSDATETIME(), NULL)
 
 
 select * from navigation.menu_items order by menu_item_id desc

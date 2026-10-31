@@ -35,7 +35,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(NULL, 'PURCHASING', 'Compras', NULL, 'pi pi-shopping-cart', 1, 1, SYSDATETIME(), NULL)
+(NULL, 'PURCHASING', 'Compras', NULL, 'pi pi-shopping-bag', 1, 1, SYSDATETIME(), NULL)
 GO
 
 INSERT INTO navigation.role_menu_items (role_id, menu_item_id)
@@ -57,7 +57,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(13, 'SUPPLIERS', 'Proveedores', '/suppliers', 'pi pi-truck', 1, 1, SYSDATETIME(), NULL)
+(13, 'SUPPLIERS', 'Proveedores', '/suppliers', 'pi pi-users', 4, 1, SYSDATETIME(), NULL)
 GO
 
 INSERT INTO navigation.role_menu_items (role_id, menu_item_id)

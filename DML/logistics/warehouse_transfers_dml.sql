@@ -36,7 +36,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(NULL, 'LOGISTICS', 'Logística', NULL, 'pi pi-exchange', 1, 1, SYSDATETIME(), NULL)
+(NULL, 'LOGISTICS', 'Logística', NULL, 'pi pi-truck', 1, 1, SYSDATETIME(), NULL)
 
 
 select * from navigation.menu_items order by menu_item_id desc

@@ -33,7 +33,7 @@ INSERT INTO navigation.menu_items (
     updated_at
 )
 VALUES
-(23, 'PRICE_LISTS', 'Listas de Precios', '/price-lists', 'pi pi-tag', 1, 1, SYSDATETIME(), NULL)
+(23, 'PRICE_LISTS', 'Listas de Precios', '/price-lists', 'pi pi-dollar', 2, 1, SYSDATETIME(), NULL)
 
 
 SELECT * FROM navigation.menu_items ORDER BY menu_item_id DESC
